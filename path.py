@@ -57,5 +57,4 @@ def track_object(video_file):
 
 if __name__ == "__main__":
     video_file = "Squat - Trim.mp4"
-    # video_file = "Squat.mp4"
     track_object(video_file)
