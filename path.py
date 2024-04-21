@@ -63,7 +63,7 @@ while True:
             tracker = trackers[tracker_key]() 
         
     cv2.imshow("Tracking",frame)
-    k = cv2.waitKey(60)
+    k = cv2.waitKey(30)
     
 
     if k == 27:
