@@ -18,41 +18,58 @@ tracker_key = "csrt"
 roi = None
 tracker = trackers[tracker_key]()
 
-#selecting video 
+# selecting video 
 cap = cv2.VideoCapture(video_file)
 
+# read the first frame
+ret, frame = cap.read()
+if not ret:
+    print("Failed to open video file")
+    exit()
+    
+# select region of interest 
+roi = cv2.selectROI("Tracking", frame)
+tracker.init(frame, roi)
+
+centroid_path = [] # list to store centroid's coordinates 
+
 while True:   
-    frame = cap.read()[1]   #open and read video 
-    if frame is None:       #break if video cannot be read 
+    frame = cap.read()[1]   # open and read video 
+    if frame is None:       # break if video cannot be read 
         break
     
     if roi is not None:        
-        success,box = tracker.update(frame)    #selectng region of interest 
+        success,box = tracker.update(frame)    # selectng region of interest 
 
         if success:
-            x,y,w,h = [int(c) for c in box]   #coordinates of bounding box 
+            x,y,w,h = [int(c) for c in box]   # coordinates of bounding box 
         
-            # Calculate centroid of bounding box 
+            # calculate centroid of bounding box 
             cx = x + w // 2
             cy = y + h // 2
             
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            centroid_path.append((cx,cy))  # append centroid coordinates to list above 
+                        
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)  # draw bounding box 
             cv2.circle(frame, (cx, cy), 5, (0, 255, 0), -1)  # draw centroid in bounding box 
             
-        else:   #if tracking failed at a frame, select tracking again  
+            # drawing centroid path 
+            for i in range(1,len(centroid_path)):
+                cv2.line(frame,centroid_path[i-1],centroid_path[i],(0,255,0),2)
+            
+        else:   # if tracking failed at a frame, select tracking again  
             print ("Tracking has failed")   
             roi = None
             tracker = trackers[tracker_key]() 
         
     cv2.imshow("Tracking",frame)
-    k = cv2.waitKey(30)
+    k = cv2.waitKey(60)
     
-    if k == ord("s"):
-        roi = cv2.selectROI("Tracking",frame)
-        tracker.init(frame,roi)
-    elif k == ord("q"):
+
+    if k == 27:
         break
 
 
 cap.release()
 cv2.destroyAllWindows()
+
