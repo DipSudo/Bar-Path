@@ -33,9 +33,12 @@ if not ret:
 roi = cv2.selectROI("Tracking", frame)
 tracker.init(frame, roi)
 
-centroid_path = [] # list to store centroid's coordinates 
+centroid_path = []      # list to store centroid's coordinates 
+rel_centroid_path = []  # list to store centroid's coordinates relative to the origin 
+origin = None
 
 while True:   
+    
     frame = cap.read()[1]   # open and read video 
     if frame is None:       # break if video cannot be read 
         break
@@ -50,7 +53,20 @@ while True:
             cx = x + w // 2
             cy = y + h // 2
             
+            if origin is None:        #setting ther initial centroid position as the origin 
+                origin = (cx, cy)
+                
+            # Calculate the position relative to the origin
+            rel_cx = cx - origin[0]
+            rel_cy = cy - origin[1]   
+                
+            
             centroid_path.append((cx,cy))  # append centroid coordinates to list above 
+            rel_centroid_path.append((rel_cx,rel_cy))  # append centroid coordinates to list above 
+            
+            # add centroid coordinates as text on the video
+            text = f"({rel_cx}, {rel_cy})"
+            cv2.putText(frame, text, (cx + 10, cy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                         
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)  # draw bounding box 
             cv2.circle(frame, (cx, cy), 5, (0, 255, 0), -1)  # draw centroid in bounding box 
