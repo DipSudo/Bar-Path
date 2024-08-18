@@ -46,8 +46,7 @@ def video_speed(video_file):
         return
 
     # Get the frames per second (fps) of the video
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    
+    # fps = cap.get(cv2.CAP_PROP_FPS)
     # Calculate the delay in milliseconds
     # delay = int(1000 / fps)
     delay = int(2)   # works for some reason....???
@@ -87,8 +86,10 @@ def initialize_video_writer(video_file, output_file):
     # Get the frame width, height, and frames per second (fps) of the video
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    # Define codec and create VideoWriter object
+    # fps = cap.get(cv2.CAP_PROP_FPS)
+    fps = 28
+    
+
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Codec for .mp4
     out = cv2.VideoWriter(output_file, fourcc, fps, (frame_width, frame_height))
     
