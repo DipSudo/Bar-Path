@@ -1,6 +1,8 @@
 import cv2 
 
-video_file = "Squat - Trim.mp4"  #video to track 
+# video_file = "Squat - Trim.mp4"  #video to track 
+
+video_file = "Squat 2.MP4"  #video to track 
 
 #various openCV tracking packages 
 trackers = { 
