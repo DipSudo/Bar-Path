@@ -52,6 +52,7 @@ def video_speed(video_file):
     # delay = int(1000 / fps)
     delay = int(2)   # works for some reason....???
     return delay 
+
 def video_title(frame, title):
     """
     Function to overlay a title on the video frame.
